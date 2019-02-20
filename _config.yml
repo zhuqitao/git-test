@@ -12,7 +12,7 @@ timezone:
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://niexiaotao.cn/
-root: /
+root: /zqt-blog/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
@@ -82,7 +82,7 @@ post_style:
 # Custom Setting End
 # Directory
 source_dir: source
-public_dir: public
+public_dir: zqt-blog/public
 tag_dir: tags
 archive_dir: archive
 category_dir: categories
@@ -130,8 +130,8 @@ theme: aircloud
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
-#deploy:
-#  type: git
-#  repo: your repo url
-#  branch: master
+deploy:
+ type: git
+ repo: https://github.com/zhuqitao/zqt-blog.git
+ branch: gh-pages
 
