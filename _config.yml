@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: AirCloud Blog
+title: ZhuQiTao Blog
 subtitle: sometimes code， sometimes design
-author: Xiaotao Nie
+author: ZhuQiTao
 language: zh
 timezone:
 
@@ -20,17 +20,17 @@ permalink_defaults:
 
 # Site settings
 # 网站综合内容设置：
-SEOTitle: AirCloud的博客 | AirCloud's Blog
-email: onlythen@yeah.net
-description: "聂小涛的博客"
-keyword: "腾讯"
+SEOTitle: 朱启涛 | 博客
+email: 1362335135@qq.com
+description: "朱启涛的博客"
+keyword: "blog"
 
 # SNS settings
 # 一些社交平台地址，支持以下几种：
-weibo_username:     3286578617
-zhihu_username:     ai-er-lan-xue-da
-github_username:    AirCloud
-twitter_username:   iconie_alloy
+weibo_username:     5856217235
+zhihu_username:     zhu-qi-tao-24
+github_username:    zhuqitao
+# twitter_username:   iconie_alloy
 facebook_username:  xiaotao.nie.5
 linkedin_username:  小涛-聂-80964aba
 
