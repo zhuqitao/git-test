@@ -4,7 +4,7 @@
 
 # Site
 title: ZhuQiTao Blog
-subtitle: sometimes code， sometimes design
+subtitle: 学习，永无止境！
 author: ZhuQiTao
 language: zh
 timezone:
@@ -31,8 +31,8 @@ weibo_username:     5856217235
 zhihu_username:     zhu-qi-tao-24
 github_username:    zhuqitao
 # twitter_username:   iconie_alloy
-facebook_username:  xiaotao.nie.5
-linkedin_username:  小涛-聂-80964aba
+# facebook_username:  xiaotao.nie.5
+# linkedin_username:  小涛-聂-80964aba
 
 # Build settings
 anchorjs: true                          # if you want to customize anchor. check out line:181 of `post.html`
