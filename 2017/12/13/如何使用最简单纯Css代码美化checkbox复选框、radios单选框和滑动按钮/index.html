@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="聂小涛的博客">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/zqt-blog/img/favicon.ico">
+
+    <title>
+        
+        简洁的纯css代码美化复选框、单选框和滑动按钮 - AirCloud的博客 | AirCloud&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/zqt-blog/css/aircloud.css">
+    <link rel="stylesheet" href="/zqt-blog/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code， sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/zqt-blog/img/avatar.jpg">
+        </div>
+        <div class="name">
+            <i>Xiaotao Nie</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/zqt-blog/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#最简洁的代码美化复选框、单选框和滑动按钮"><span class="toc-text">最简洁的代码美化复选框、单选框和滑动按钮</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#效果预览"><span class="toc-text">效果预览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-复选框"><span class="toc-text">1. 复选框</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-单选框"><span class="toc-text">2. 单选框</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-滑动按钮"><span class="toc-text">3. 滑动按钮</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> sometimes code， sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        简洁的纯css代码美化复选框、单选框和滑动按钮
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2017-12-13 20:36:52</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/zqt-blog/tags/#css" title="css">css</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <h2 id="最简洁的代码美化复选框、单选框和滑动按钮"><a href="#最简洁的代码美化复选框、单选框和滑动按钮" class="headerlink" title="最简洁的代码美化复选框、单选框和滑动按钮"></a>最简洁的代码美化复选框、单选框和滑动按钮</h2><h3 id="效果预览"><a href="#效果预览" class="headerlink" title="效果预览"></a>效果预览</h3><p><img src="https://image-static.segmentfault.com/485/070/485070410-5a30c819ab8aa_articlex" alt="图片描述"></p>
+<h3 id="1-复选框"><a href="#1-复选框" class="headerlink" title="1. 复选框"></a>1. 复选框</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">        <span class="selector-class">.switch</span> &#123;</span></span><br><span class="line"><span class="undefined">            margin: 20px 20px 0 0;</span></span><br><span class="line"><span class="undefined">            display: flex;</span></span><br><span class="line"><span class="undefined">            align-items: center;</span></span><br><span class="line"><span class="undefined">            width: auto;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="css">        <span class="selector-class">.checkbox-input</span> &#123;</span></span><br><span class="line"><span class="undefined">            display: none</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="css">        <span class="selector-class">.checkbox</span> &#123;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">-webkit-transition</span>: <span class="selector-tag">background-color</span> 0<span class="selector-class">.3s</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">transition</span>: <span class="selector-tag">background-color</span> 0<span class="selector-class">.3s</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">background-color</span>: <span class="selector-id">#fff</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">border</span>: 1<span class="selector-tag">px</span> <span class="selector-tag">solid</span> <span class="selector-id">#d7d7d7</span>;</span></span><br><span class="line"><span class="undefined">            border-radius: 3px;</span></span><br><span class="line"><span class="undefined">            width: 16px;</span></span><br><span class="line"><span class="undefined">            height: 16px;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">vertical-align</span><span class="selector-pseudo">:middle</span>;</span></span><br><span class="line"><span class="undefined">            margin: 0 5px;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="css">        <span class="selector-class">.checkbox-input</span><span class="selector-pseudo">:checked+.checkbox</span> &#123;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">background-color</span>: <span class="selector-id">#57ad68</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="css">        <span class="selector-class">.checkbox-input</span><span class="selector-pseudo">:checked+.checkbox</span><span class="selector-pseudo">:after</span> &#123;</span></span><br><span class="line"><span class="undefined">            content: "\2714";</span></span><br><span class="line"><span class="undefined">            display: inline-block;</span></span><br><span class="line"><span class="undefined">            height: 100%;</span></span><br><span class="line"><span class="undefined">            width: 100%;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">color</span>: <span class="selector-id">#fff</span>;</span></span><br><span class="line"><span class="undefined">            text-align: center;</span></span><br><span class="line"><span class="undefined">            line-height: 16px;</span></span><br><span class="line"><span class="undefined">            font-size: 12px;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">box-shadow</span>: 0 0 4<span class="selector-tag">px</span> <span class="selector-id">#57ad68</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"switch"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">class</span>=<span class="string">"checkbox-input"</span> <span class="attr">id</span>=<span class="string">"checkbox"</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">name</span>=<span class="string">"demo-checkbox1"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"checkbox"</span> <span class="attr">for</span>=<span class="string">"checkbox"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span>&gt;</span>Hello<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-单选框"><a href="#2-单选框" class="headerlink" title="2. 单选框"></a>2. 单选框</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">        <span class="selector-class">.switch</span> &#123;</span></span><br><span class="line"><span class="undefined">            display: flex;</span></span><br><span class="line"><span class="undefined">            align-items: center;</span></span><br><span class="line"><span class="undefined">            width: auto;</span></span><br><span class="line"><span class="undefined">            float: left;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="css">        <span class="selector-class">.radio-beauty-container</span> <span class="selector-class">.radio-beauty</span> &#123;</span></span><br><span class="line"><span class="undefined">            width: 16px;</span></span><br><span class="line"><span class="undefined">            height: 16px;</span></span><br><span class="line"><span class="undefined">            box-sizing: border-box;</span></span><br><span class="line"><span class="undefined">            display: inline-block;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">border</span>: 1<span class="selector-tag">px</span> <span class="selector-tag">solid</span> <span class="selector-id">#d7d7d7</span>;</span></span><br><span class="line"><span class="undefined">            margin: 0 5px;</span></span><br><span class="line"><span class="undefined">            border-radius: 50%;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">transition</span>: 0<span class="selector-class">.2s</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="css">        <span class="selector-class">.radio-beauty-container</span> <span class="selector-tag">input</span><span class="selector-attr">[type="radio"]</span><span class="selector-pseudo">:checked+.radio-beauty</span> &#123;</span></span><br><span class="line"><span class="undefined">            border: solid 1px green;</span></span><br><span class="line"><span class="undefined">            padding: 3px;</span></span><br><span class="line"><span class="undefined">            background-color: green;</span></span><br><span class="line"><span class="undefined">            background-clip: content-box;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">box-shadow</span>: <span class="selector-tag">inset</span> 0 0 1<span class="selector-tag">px</span> <span class="selector-tag">rgba</span>(0,128,0, 0<span class="selector-class">.2</span>), 0 0 3<span class="selector-tag">px</span> <span class="selector-tag">green</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"radio-beauty-container"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"switch"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"radio-name"</span>&gt;</span>radio2<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"radioName"</span> <span class="attr">id</span>=<span class="string">"radioName2"</span> <span class="attr">hidden</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"radioName2"</span> <span class="attr">class</span>=<span class="string">"radio-beauty"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"switch"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"radio-name"</span>&gt;</span>radio3<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"radioName"</span> <span class="attr">id</span>=<span class="string">"radioName3"</span> <span class="attr">hidden</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"radioName3"</span> <span class="attr">class</span>=<span class="string">"radio-beauty"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-滑动按钮"><a href="#3-滑动按钮" class="headerlink" title="3. 滑动按钮"></a>3. 滑动按钮</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">        <span class="selector-class">.switch-slide-label</span> &#123;</span></span><br><span class="line"><span class="undefined">            display: block;</span></span><br><span class="line"><span class="undefined">            width: 34px;</span></span><br><span class="line"><span class="undefined">            height: 18px;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">background</span>: <span class="selector-id">#ccc</span>;</span></span><br><span class="line"><span class="undefined">            border-radius: 30px;</span></span><br><span class="line"><span class="undefined">            cursor: pointer;</span></span><br><span class="line"><span class="undefined">            position: relative;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">-webkit-transition</span>: 0<span class="selector-class">.3s</span> <span class="selector-tag">ease</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">transition</span>: 0<span class="selector-class">.3s</span> <span class="selector-tag">ease</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        </span></span><br><span class="line"><span class="css">        <span class="selector-class">.switch-slide-label</span><span class="selector-pseudo">:after</span> &#123;</span></span><br><span class="line"><span class="undefined">            content: '';</span></span><br><span class="line"><span class="undefined">            display: block;</span></span><br><span class="line"><span class="undefined">            width: 16px;</span></span><br><span class="line"><span class="undefined">            height: 16px;</span></span><br><span class="line"><span class="undefined">            border-radius: 100%;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">background</span>: <span class="selector-id">#fff</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">box-shadow</span>: 0 1<span class="selector-tag">px</span> 1<span class="selector-tag">px</span> <span class="selector-tag">rgba</span>(0, 0, 0, <span class="selector-class">.1</span>);</span></span><br><span class="line"><span class="undefined">            position: absolute;</span></span><br><span class="line"><span class="undefined">            left: 1px;</span></span><br><span class="line"><span class="undefined">            top: 1px;</span></span><br><span class="line"><span class="undefined">            -webkit-transform: translateZ(0);</span></span><br><span class="line"><span class="undefined">            transform: translateZ(0);</span></span><br><span class="line"><span class="css">            <span class="selector-tag">-webkit-transition</span><span class="selector-pseudo">:0.3s</span> <span class="selector-tag">ease</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">transition</span><span class="selector-pseudo">:0.3s</span> <span class="selector-tag">ease</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        </span></span><br><span class="line"><span class="css">        <span class="selector-class">.switch-slide</span> <span class="selector-tag">input</span><span class="selector-pseudo">:checked+label</span> &#123;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">background</span>: <span class="selector-id">#34bf49</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">transition</span>: 0<span class="selector-class">.3s</span> <span class="selector-tag">ease</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="css">        <span class="selector-class">.switch-slide</span> <span class="selector-tag">input</span><span class="selector-pseudo">:checked+label</span><span class="selector-pseudo">:after</span> &#123;</span></span><br><span class="line"><span class="undefined">            left: 17px;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"radio-beauty-container"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"switch-slide"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">id</span>=<span class="string">"menu-right"</span> <span class="attr">hidden</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"menu-right"</span> <span class="attr">class</span>=<span class="string">"switch-slide-label"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src data-src="/zqt-blog/img/donate.jpg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/iconie_alloy">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/ai-er-lan-xue-da">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/3286578617">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/xiaotao.nie.5">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://github.com/AirCloud">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.linkedin.com/in/小涛-聂-80964aba">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://www.10000h.top">10000H</a></span>
+        <span>/</span>
+        
+        <span><a href="https://niexiaotao.com">Xiaotao&#39;s Page</a></span>
+        <span>/</span>
+        
+        <span><a href="#">It helps SEO</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/zqt-blog/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/zqt-blog/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="聂小涛的博客">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/zqt-blog/img/favicon.ico">
+
+    <title>
+        
+        实现一个redux - AirCloud的博客 | AirCloud&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/zqt-blog/css/aircloud.css">
+    <link rel="stylesheet" href="/zqt-blog/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code， sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/zqt-blog/img/avatar.jpg">
+        </div>
+        <div class="name">
+            <i>Xiaotao Nie</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/zqt-blog/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#先不考虑中间件，实现一个简洁的redux"><span class="toc-text">先不考虑中间件，实现一个简洁的redux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现createStore"><span class="toc-text">实现createStore</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#支持中间件和异步action的redux实现"><span class="toc-text">支持中间件和异步action的redux实现</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> sometimes code， sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        实现一个redux
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-10-15 21:16:52</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/zqt-blog/tags/#javascript" title="javascript">javascript</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>#实现一个redux</p>
+<h2 id="先不考虑中间件，实现一个简洁的redux"><a href="#先不考虑中间件，实现一个简洁的redux" class="headerlink" title="先不考虑中间件，实现一个简洁的redux"></a>先不考虑中间件，实现一个简洁的redux</h2><h3 id="实现createStore"><a href="#实现createStore" class="headerlink" title="实现createStore"></a>实现createStore</h3><p>createStore是redux最主要的一个API了，通过createStore可以创建一个store用来存放应用中所有的state，一个应用只能有一个store。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 先创建一个mini-redux.js文件:</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createStore</span>(<span class="params">reducer</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化store</span></span><br><span class="line">    <span class="keyword">let</span> currentStore = &#123;&#125;;</span><br><span class="line">    <span class="comment">// 初始化事件列表</span></span><br><span class="line">    <span class="keyword">let</span> currentListeners = [];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取state</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getState</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> currentStore;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 订阅事件</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">subscribe</span>(<span class="params">listener</span>) </span>&#123;</span><br><span class="line">        currentListeners.push(listener);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 定义dispatch方法</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">        currentStore = reducer(currentStore, action);</span><br><span class="line">        currentListeners.forEach(<span class="function"><span class="params">v</span> =&gt;</span> v());</span><br><span class="line">        <span class="comment">// return dispatch;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 默认执行reducer type类型不要命中reducer中自定义的case</span></span><br><span class="line">    dispatch(&#123;<span class="attr">type</span>: <span class="string">'@ZQT-REDUX'</span>&#125;);</span><br><span class="line">    <span class="keyword">return</span> &#123;getState, subscribe, dispatch&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面创建了一个redux.js文件，并暴露了一个createStore方法，接受reducer作为参数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建mini-react-redux.js</span></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> PropTypes <span class="keyword">from</span> <span class="string">'prop-types'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> connect = <span class="function">(<span class="params">mapStateToProps = state =&gt; state, mapDispatchToProps = &#123;&#125;</span>) =&gt;</span> (WrapComponent) =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">class</span> connentComponent <span class="keyword">extends</span> React.Component&#123;</span><br><span class="line">        <span class="keyword">static</span> contextTypes = &#123;</span><br><span class="line">            store: PropTypes.object</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">constructor</span>(<span class="params">props, context</span>) &#123;</span><br><span class="line">            <span class="keyword">super</span>(props, context);</span><br><span class="line">            <span class="keyword">this</span>.state = &#123;</span><br><span class="line">                props: &#123;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        componentDidMount() &#123;</span><br><span class="line">            <span class="keyword">const</span> &#123;store&#125; = <span class="keyword">this</span>.context;</span><br><span class="line">            <span class="comment">// 为什么非要订阅  因为没一个connect实际上就是一个订阅  每当dispatch执行的时候  就要重新执行以下update方法</span></span><br><span class="line">            store.subscribe(<span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">this</span>.update());</span><br><span class="line">            <span class="keyword">this</span>.update();</span><br><span class="line">        &#125;</span><br><span class="line">        update = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> &#123;store&#125; = <span class="keyword">this</span>.context;</span><br><span class="line">            <span class="keyword">const</span> stateProps = mapStateToProps(store.getState());</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 每一个action需要用dispatch包裹一下</span></span><br><span class="line">            <span class="keyword">const</span> stateDispatch = bindActionCreators(mapDispatchToProps, store.dispatch);</span><br><span class="line">            <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">                props: &#123;</span><br><span class="line">                    ...this.props,</span><br><span class="line">                    ...stateProps,</span><br><span class="line">                    ...stateDispatch</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">        render() &#123;</span><br><span class="line">            <span class="keyword">return</span> &lt;WrapComponent &#123;...this.state.props&#125;/&gt;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> Provider <span class="keyword">extends</span> React.Component&#123;</span><br><span class="line">    <span class="keyword">static</span> childContextTypes = &#123;</span><br><span class="line">        store: PropTypes.object</span><br><span class="line">    &#125;</span><br><span class="line">    getChildContext() &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            store: <span class="keyword">this</span>.store</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params">props, context</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>(props, context);</span><br><span class="line">        <span class="keyword">this</span>.store = props.store;</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.props.children</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bindActionCreators</span>(<span class="params">creators, dispatch</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> bound = &#123;&#125;;</span><br><span class="line">    <span class="built_in">Object</span>.keys(creators).forEach(<span class="function"><span class="params">v</span> =&gt;</span> &#123;</span><br><span class="line">        bound[v] = bindActionCreator(creators[v], dispatch);</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> bound;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bindActionCreator</span>(<span class="params">creator, dispatch</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> dispatch(creator(...args))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面创建了mini-react-redux.js文件，主要暴露了connect方法和Provider组件。</p>
+<p>先看Provider组件。Provider利用的react的context属性，把store注入到Provider组件，并返回this.props.children(也就是Provider组件里面嵌入的组件，一般是页面的跟组件App组件)，这样所有的组件都可以共享store。</p>
+<p>然后再看connect方法。connect方法是一个双重嵌套的方法(专业名词叫函数柯里化)里面的方法接受一个组件并且返回一个组件，正式高阶组件的用法，外面的函数接受mapStateToProps和mapDispatchToProps两个参数，mapStateToProps是用来把store里面的数据映射到组件的props属性中，mapDispatchToProps是把用户自己定义的action映射到组件的props属性中。</p>
+<p>在componentDidMount方法里面执行了store.subscribe(() =&gt; this.update())这句代码，是因为每次使用dispatch触发一个action的时候都要执行一下update方法，即重新获取store数据并映射到组件中去，这样才能保证store数据发生变化，组件props能同时跟着变化。</p>
+<p>bindActionCreators方法是用来把每一个action用dispatch方法包裹一下，因为action可能只是返回一个具有type属性的对象，只有用dispatch执行action才有意义。</p>
+<blockquote>
+<p>到此为止，一个没有中间件的不支持异步dispatch的简洁版的redux已经实现了，创建一个demo，就可以看到效果了<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建index.js 作为项目入口文件，大家可以自己添加action和reducer，就可以查看效果</span></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; createStore, applyMiddleware &#125; <span class="keyword">from</span> <span class="string">'./mini-redux'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; counter &#125; <span class="keyword">from</span> <span class="string">'./index.redux'</span></span><br><span class="line"><span class="keyword">import</span> &#123; Provider &#125; <span class="keyword">from</span> <span class="string">'./mini-react-redux'</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'./App'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(counter);</span><br><span class="line">ReactDOM.render(</span><br><span class="line">  (</span><br><span class="line">    &lt;Provider store=&#123;store&#125;&gt;</span><br><span class="line">      &lt;App /&gt;</span><br><span class="line">    &lt;<span class="regexp">/Provider&gt;</span></span><br><span class="line"><span class="regexp">  ),</span></span><br><span class="line"><span class="regexp">  document.getElementById('root'))</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="支持中间件和异步action的redux实现"><a href="#支持中间件和异步action的redux实现" class="headerlink" title="支持中间件和异步action的redux实现"></a>支持中间件和异步action的redux实现</h2><p>上面实现了简洁版的redux，再此基础上添加支持中间件的代码</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修改mini-redux.js为</span></span><br><span class="line">export <span class="function"><span class="keyword">function</span> <span class="title">createStore</span><span class="params">(reducer, enhancer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(enhancer) &#123;</span><br><span class="line">        <span class="keyword">return</span> enhancer(createStore)(reducer)</span><br><span class="line">    &#125;</span><br><span class="line">    let currentStore = &#123;&#125;;</span><br><span class="line">    let currentListeners = [];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> currentStore;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">subscribe</span><span class="params">(listener)</span> </span>&#123;</span><br><span class="line">        currentListeners.push(listener);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span><span class="params">(action)</span> </span>&#123;</span><br><span class="line">        currentStore = reducer(currentStore, action);</span><br><span class="line">        currentListeners.forEach(v =&gt; v());</span><br><span class="line">        <span class="comment">// return dispatch;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dispatch(&#123;type: <span class="string">'@ZQT-REDUX'</span>&#125;);</span><br><span class="line">    <span class="keyword">return</span> &#123;getState, subscribe, dispatch&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export <span class="function"><span class="keyword">function</span> <span class="title">applyMiddleware</span><span class="params">(<span class="rest_arg">...middlewares</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> createStore=&gt;(...args)=&gt; &#123;</span><br><span class="line">        <span class="comment">// 这里args 就是上面createStore 传过来的reducers</span></span><br><span class="line">        <span class="keyword">const</span> store = createStore(...args)</span><br><span class="line">        let dispatch = store.dispatch</span><br><span class="line">        <span class="comment">// 暴漏 getState 和 dispatch 给 第三方中间价使用</span></span><br><span class="line">        <span class="keyword">const</span> midApi = &#123;</span><br><span class="line">            getState: store.getState,</span><br><span class="line">            dispatch: (...args) =&gt; dispatch(...args)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 创造第三方中间件使用 middlewareAPI 后返回的函数组成的数组</span></span><br><span class="line">        <span class="keyword">const</span> middlewareChain = middlewares.map(middleware =&gt; middleware(midApi))</span><br><span class="line">        <span class="comment">// 结合这一组函数 和 dispatch 组成的新的 dispatch，然后这个暴漏给用户使用，而原有的 store.dispatch 是不变的，但是不暴漏</span></span><br><span class="line">        dispatch = compose(...middlewareChain)(store.dispatch);</span><br><span class="line">        <span class="keyword">return</span>&#123;</span><br><span class="line">            ...store,</span><br><span class="line">            dispatch</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export <span class="function"><span class="keyword">function</span> <span class="title">compose</span><span class="params">(<span class="rest_arg">...funcs</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(funcs.length === <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> arg =&gt; arg</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(funcs.length === <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> funcs[<span class="number">0</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> funcs.reduce((ret, item) =&gt; (...args) =&gt; item(ret(...args)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>createStore方法修改了一下，多接受了一个enhancer方法，enhancer就是在index.js创建store的时候传过来的applyMiddleware方法。判断是否传了enhancer参数，如果有就return enhancer(createStore)(reducer)</p>
+<p>applyMiddleware方法接受多个中间件作为参数，这个方法的最终目的就是创建一个新的dispatch属性，新的dispatch属性是经过中间件修饰过的，并且暴露这个新的dispatch属性，原来的dispatch属性不变。</p>
+<p>compose方法是一个可以吧compose(fn1,fn2,fn3)(arg)转为fn3(fn2(fn1(arg)))的方法，也就是fn1的执行结果作为fn2的参数，fn2的执行结果作为fn1的参数，依次类推。正好可以利用reduce的特性实现这个效果。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> thunk = <span class="function">(<span class="params">&#123;getState, dispatch&#125;</span>) =&gt;</span> next =&gt; <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 如果是函数  就执行action</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> action === <span class="string">'function'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> action(dispatch, getState)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> next(action)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> thunk</span><br></pre></td></tr></table></figure>
+<p>异步action在定义的时候返回的就是一个接受一个dispatch的方法，所以如果action是一个函数，就吧dispatch和getState方法传给该action，并且执行该action。如果不是一个函数，就直接返回action。</p>
+<blockquote>
+<p>到此为止一个支持中间件的redux就实现了，该demo只是为了学习redux的思想，不能作为真正的redux来使用，有很多类型检查代码都省略了</p>
+</blockquote>
+<p>从实现迷你版的redux可以体会到redux精巧的设计和函数式编程的魅力，有队函数式编程感兴趣的可以看一下这篇文章<a href="https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/ch1.html" target="_blank" rel="noopener">https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/ch1.html</a></p>
+<p>github源码地址：<a href="https://github.com/zhuqitao/zqt-redux" target="_blank" rel="noopener">https://github.com/zhuqitao/zqt-redux</a></p>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src data-src="/zqt-blog/img/donate.jpg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/iconie_alloy">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/ai-er-lan-xue-da">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/3286578617">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/xiaotao.nie.5">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://github.com/AirCloud">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.linkedin.com/in/小涛-聂-80964aba">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://www.10000h.top">10000H</a></span>
+        <span>/</span>
+        
+        <span><a href="https://niexiaotao.com">Xiaotao&#39;s Page</a></span>
+        <span>/</span>
+        
+        <span><a href="#">It helps SEO</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/zqt-blog/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/zqt-blog/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="聂小涛的博客">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/zqt-blog/img/favicon.ico">
+
+    <title>
+        
+        作用域与闭包 - AirCloud的博客 | AirCloud&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/zqt-blog/css/aircloud.css">
+    <link rel="stylesheet" href="/zqt-blog/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code， sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/zqt-blog/img/avatar.jpg">
+        </div>
+        <div class="name">
+            <i>Xiaotao Nie</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/zqt-blog/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#作用域与闭包"><span class="toc-text">作用域与闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#工作模式"><span class="toc-text">工作模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#作用域"><span class="toc-text">作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#作用域提升"><span class="toc-text">作用域提升</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包"><span class="toc-text">闭包</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> sometimes code， sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        作用域与闭包
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-02-02 20:11:23</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/zqt-blog/tags/#javascript" title="javascript">javascript</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <h2 id="作用域与闭包"><a href="#作用域与闭包" class="headerlink" title="作用域与闭包"></a>作用域与闭包</h2><blockquote>
+<p>如何用js创建10个button标签，点击每个按钮时打印按钮对应的序号？</p>
+</blockquote>
+<p>看到上述问题，如果你能看出来这个问题实质上是考对作用域的理解，那么恭喜你，这篇文章你可以不用看了，说明你对作用域已经理解的很透彻了，但是如果你看不出来这是一道考作用域的题目，那么请看下文…</p>
+<h3 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h3><p> 在所有的语言中，作用域一般有两种主要的工作模式：词法作用域和动态作用域。词法作用域就是定义在词法阶段的作用域，是由写代码时将变量和块作用域写在哪里来决定的，不会改变。而动态作用域并不关心函数和作用域是如何声明以及在任何处声明的，只关心它们从何处调用。javascript是词法作用域工作模式。 看下面的例子体会一下：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">static</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> foo=<span class="number">1</span></span><br><span class="line">    alert(foo)         </span><br><span class="line">&#125;      </span><br><span class="line">!<span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> foo=<span class="number">2</span></span><br><span class="line">    <span class="keyword">static</span>(); <span class="comment">// 如果是词法作用域会打印1，如果是动态作用域则打印2   </span></span><br><span class="line">&#125;();</span><br></pre></td></tr></table></figure>
+<h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p>在es6之前javascript的作用域只有全局作用域和局部作用域（函数作用域），是没有块级作用域的。在es6中提供了let，可以简单的定义一个块级作用域变量。使用let可以将变量绑定在所在的任意作用域中（通常是{…}内部），也就是说let为其声明的变量隐式的劫持了所在的块级作用域。<br>为了方便理解作用域，需要知道下面几个概念：</p>
+<ul>
+<li>自由变量：当前作用域没有的变量就称为自由变量</li>
+<li>作用域链：当前作用域没定义的变量（自由变量），会逐级向父级作用域寻找</li>
+<li>父级作用域： 哪个作用域定义了当前作用域，那就是当前作用域的父级作用域</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    alert(a) <span class="comment">// 在foo函数作用域中a就是自由变量，因为在foo中没有定义a，便向父级作用域（此为全局作用域）查找</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="作用域提升"><a href="#作用域提升" class="headerlink" title="作用域提升"></a>作用域提升</h3><p> 关于作用域提升与js引擎线程运行原理有关，js引擎运行时会执行三步操作，第一步是先检查你的js代码有没有低级的语法错误，第二步是预编译，第三步是根据代码顺序解释一句执行一句。</p>
+<p>第一步和第三步都很好理解，重点解释一下第二步预编译，所谓预编译就是在执行代码会把所有的变量声明和函数声明预先处理。当你写了一句var a = 1时，javascript会当成两个操作：var a;和a = 1;第一个是在预编译中执行的，此时只是声明了a这个变量，没有赋值操作，所以此阶段a的值为undefined。<br>正是因为预编译存在，所以javascript会存在作用域变量提升。看下面的例子可以更好的理解：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">console.log(a) <span class="comment">// undefined</span></span><br><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//上述代码可以这样理解</span></span><br><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> <span class="comment">// 此时a的值为undefined</span></span><br><span class="line">console.log(a)</span><br><span class="line"><span class="selector-tag">a</span> = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>变量提升有两点需要记住：</p>
+<ul>
+<li>只有声明才会被提升</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">foo()</span><br><span class="line">foo =  <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">// 这里只是赋值表达式，不会被提升</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123; <span class="comment">// 以function开头定义的函数才是声明，会被提升</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以这样理解</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br><span class="line">foo() <span class="comment">// 2</span></span><br><span class="line">foo =  <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每个作用域都会提升，提升到当前作用域</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">foo</span><span class="params">()</span></span></span><br><span class="line">function foo () &#123;</span><br><span class="line">    console.log(a) <span class="comment">// undefinded</span></span><br><span class="line">    <span class="selector-tag">var</span> <span class="selector-tag">a</span> = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//可以这样理解</span></span><br><span class="line"></span><br><span class="line">function foo () &#123;</span><br><span class="line">    <span class="selector-tag">var</span> <span class="selector-tag">a</span> <span class="comment">// undefined</span></span><br><span class="line">    console.log(a)</span><br><span class="line">    <span class="selector-tag">a</span> = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="title">foo</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p>对于闭包的定义，各种说法都有，在KYLE SIMPSON著的《你不知道的javascript》中是这样定义的：当函数可以记住并访问所在的词法作用域时，就产生了闭包，即使函数是在当前此法作用域之外执行。</p>
+<p>还有网络上不同版本的定义，还有的说在函数中定义函数，并返回函数，就是闭包。其实都差不多，各个版本都有一定的道理，但也不一定全对，因为目前还没有一个完美的、得到广泛认可的公认的定义。所以这里我们对闭包的定义也不便做更多的解释。如果你觉得有一个概念定义会对你理解闭包有帮助，我比较推荐《你不知道的javascript》中对闭包的定义。</p>
+<p>从下面一个小例子先来认识一下闭包：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> fn()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> bar = foo()</span><br><span class="line">bar() <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<p>上述就是一个简单的闭包的例子，fn函数可以被执行，并且是在fn函数被定义的词法作用域的外面执行。</p>
+<p>通常由于js引擎的垃圾回收机制，一个普通的函数在执行之后内部作用域以及内部变量会被销毁，垃圾机制用来回收释放不再使用内存空间。</p>
+<p>正常来说，当foo执行之后，foo函数内部作用域会被销毁，但是闭包就会阻止垃圾回收，事实上内部作用域还存在，因为fn函数还在使用使用foo函数的内部作用域。</p>
+<blockquote>
+<p>到现在为止应该对闭包有个初步的认识了，下面就来回过头去看看最开始预留的问题：如何用js创建10个button标签，点击每个按钮时打印按钮对应的序号？</p>
+</blockquote>
+<p>先看一个错误的示例：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var i = <span class="number">1</span></span><br><span class="line">for (<span class="name">i=1</span><span class="comment">;i&lt;=10;i++)&#123;</span></span><br><span class="line">    var btn = document.createElement(<span class="string">"BUTTON"</span>)</span><br><span class="line">    btn.innerHTML = i</span><br><span class="line">    btn.addEventListener('click',function(<span class="name">event</span>)&#123;</span><br><span class="line">        alert(<span class="name">i</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    document.getElementById(<span class="string">"div"</span>).appendChild(<span class="name">btn</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>大家可以把上面的代码测试一下，你会发现屏幕上出现了10个按钮，序号从0到9，但是当你点击每一个按钮的时候发现都是弹出11，这是因为当你点击按钮的时候for循环早已经执行完毕，这时i的值已经变成11，当点击执行到alert(i)的时候，发现当前作用域没有i，便去父作用域寻找i，这时i的值为11，所以会打印出11。</p>
+<p>那么应该怎样才能达到我们想要的效果呢，我们知道IIFE函数其实也是普通函数，既然是函数就可以可以有自己的作用域，不妨利用IIFE函数来试试：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var i = <span class="number">1</span></span><br><span class="line">for (<span class="name">i=1</span><span class="comment">;i&lt;=10;i++)&#123;</span></span><br><span class="line">    (<span class="name">function</span>(<span class="name">num</span>)&#123;</span><br><span class="line">        var btn = document.createElement(<span class="string">"BUTTON"</span>)</span><br><span class="line">        btn.innerHTML = num</span><br><span class="line">        btn.addEventListener('click',function(<span class="name">event</span>)&#123;</span><br><span class="line">            alert(<span class="name">num</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">        document.getElementById(<span class="string">"div"</span>).appendChild(<span class="name">btn</span>)</span><br><span class="line">    &#125;)(<span class="name">i</span>)    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每次循环创建一个IIFE函数，每个IIFE函数都有自己的局部作用域，这里通过向IIFE函数传值的方式在IIFE函数中创建局部变量num，每一个IIFE函数都有自己的num变量，这样在点击执行alert(num)的时候就会在当前作用域找到num。</p>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src data-src="/zqt-blog/img/donate.jpg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/iconie_alloy">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/ai-er-lan-xue-da">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/3286578617">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/xiaotao.nie.5">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://github.com/AirCloud">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.linkedin.com/in/小涛-聂-80964aba">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://www.10000h.top">10000H</a></span>
+        <span>/</span>
+        
+        <span><a href="https://niexiaotao.com">Xiaotao&#39;s Page</a></span>
+        <span>/</span>
+        
+        <span><a href="#">It helps SEO</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/zqt-blog/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/zqt-blog/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>

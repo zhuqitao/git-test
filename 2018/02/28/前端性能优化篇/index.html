@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="聂小涛的博客">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/zqt-blog/img/favicon.ico">
+
+    <title>
+        
+        前端性能优化总结 - AirCloud的博客 | AirCloud&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/zqt-blog/css/aircloud.css">
+    <link rel="stylesheet" href="/zqt-blog/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code， sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/zqt-blog/img/avatar.jpg">
+        </div>
+        <div class="name">
+            <i>Xiaotao Nie</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/zqt-blog/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#资源优化"><span class="toc-text">资源优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#缓存"><span class="toc-text">缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#强制缓存"><span class="toc-text">强制缓存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#协商缓存"><span class="toc-text">协商缓存</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减少http请求"><span class="toc-text">减少http请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减小http请求资源体积"><span class="toc-text">减小http请求资源体积</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码性能"><span class="toc-text">代码性能</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> sometimes code， sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        前端性能优化总结
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-02-28 21:54:31</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/zqt-blog/tags/#javascript" title="javascript">javascript</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>#前端性能优化总结</p>
+<h2 id="资源优化"><a href="#资源优化" class="headerlink" title="资源优化"></a>资源优化</h2><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>最好的资源优化就是不加载资源。缓存也是最见效的优化手段。说实话，虽然说客户端缓存发生在浏览器端，但缓存主要还是服务端来控制，与我们前端关系并不是很大。但还是有必要了解一下。</p>
+<p>缓存包括服务端缓存和客户端缓存，本文只谈客户端缓存。所谓客户端缓存主要是http缓存。http缓存主要分为强制缓存和协商缓存。</p>
+<h4 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h4><ul>
+<li><p>Expires（http1.0）<br>在http1.0中使用Expires来做强制缓存。Exprires的值为服务端返回的数据到期时间。当再次请求时的请求时间小于返回的此时间，则直接使用缓存数据。但由于服务端时间和客户端时间可能有误差，这也将导致缓存命中的误差。</p>
+</li>
+<li><p>Cache-Control<br>Cache-Control有很多属性，不同的属性代表的意义也不同。</p>
+</li>
+</ul>
+<ol>
+<li>private：客户端可以缓存</li>
+<li>public：客户端和代理服务器都可以缓存</li>
+<li>max-age=t：缓存内容将在t秒后失效</li>
+<li>no-cache：需要使用协商缓存来验证缓存数据</li>
+<li>no-store：所有内容都不会缓存。</li>
+</ol>
+<h4 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h4><p>浏览器第一次请求数据时，服务器会将缓存标识与数据一起响应给客户端，客户端将它们备份至缓存中。再次请求时，客户端会将缓存中的标识发送给服务器，服务器根据此标识判断。若未失效，返回304状态码，浏览器拿到此状态码就可以直接使用缓存数据了。</p>
+<ul>
+<li>Last-Modified<br>服务器在响应请求时，会告诉浏览器资源的最后修改时间</li>
+<li>if-Modified-Since<br>浏览器再次请求服务器的时候，请求头会包含此字段，后面跟着在缓存中获得的Last-Modified（最后修改时间）。服务端收到此请求头发现有if-Modified-Since，则与被请求资源的最后修改时间进行对比，如果大于被请求资源最后修改时间则返回304，浏览器从缓存获取资源。如果小于被请求资源最后修改时间，则返回200，并返回最新资源，浏览器从服务端获取最新的资源，并缓存。</li>
+<li>Etag<br>由服务器生成的每个资源的唯一标识字符串</li>
+<li>If-None-Match<br>再次请求服务器时，浏览器的请求报文头部会包含此字段，后面的值为在缓存中获取的标识。服务器接收到次报文后发现If-None-Match则与被请求资源的唯一标识进行对比。如果相同，说明资源没有被修改过，返回304，浏览器从缓存获取资源，如果不同说明资源被修改过，则返回200，并返回最新资源，浏览器从服务端获取最新资源，并缓存。</li>
+</ul>
+<blockquote>
+<p>Last-Modified与ETag是可以一起使用的，服务器会优先验证ETag，一致的情况下，才会继续比对Last-Modified，最后才决定是否返回304。</p>
+</blockquote>
+<p>如果使用前端打包工具，可以在打包文件时候在给文件添加版本号或者hash值，同样可以区分资源是否过期。</p>
+<h3 id="减少http请求"><a href="#减少http请求" class="headerlink" title="减少http请求"></a>减少http请求</h3><ul>
+<li>使用CDN托管静态资源</li>
+<li>可以借助gulp、webpack等打包工具对js、css等文件合并与压缩</li>
+<li>图片懒加载、按需加载，当滚动到图片可视区域才去加载图片</li>
+<li>小图片并且基本不会改动的图片使用base64编码传输。base64不要滥用，即使小图片经过base64编码之后也会生成很长的字符串，如果滥用base64反而会适得其反</li>
+<li>雪碧图，这个也是针对基本不会更改的图片才使用雪碧图，因为如果一张图片修改，会导致整个雪碧图重新生成，如果乱用也会适得其反。</li>
+</ul>
+<h3 id="减小http请求资源体积"><a href="#减小http请求资源体积" class="headerlink" title="减小http请求资源体积"></a>减小http请求资源体积</h3><ul>
+<li>借助webpack、gulp等工具压缩资源</li>
+<li>服务端开启gzip压缩（压缩率非常可观，一般都在30%之上）</li>
+<li>如果有用打包工具，打包优化要做好，公共资源、提取第三方代码、不需要打包的库…</li>
+</ul>
+<p>##渲染优化</p>
+<blockquote>
+<p>读过前面js运行机制的应该知道，从浏览器输入url，到页面出现在屏幕上，都发生了哪些事（tcp握手、dns解析等不在认知范围）。</p>
+</blockquote>
+<ul>
+<li>FPS 16ms 小于10ms完成最好  Google devtool 查看帧率<br>如果浏览器FPS到达60，就会显得比较流畅，大多数显示器的刷新频率是60Hz，浏览器会自动按照这个频率刷新动画。<br>按照FPS等于60来计算，平均一帧的时间为1000ms/60 = 16.7ms，所以每次渲染时间不能超过16ms，如果超过这个时间就会出现丢帧、卡顿现象。</li>
+</ul>
+<p>可以在chrome浏览器开发者工具中的Timeline中查看刷新率，可以查看所有帧率耗时情况以及某一帧的执行情况。Timeline的使用教程：<a href="https://segmentfault.com/a/1190000003991459" target="_blank" rel="noopener">https://segmentfault.com/a/1190000003991459</a></p>
+<p>为了保证正常的FPS，有些渲染性能优化还是有必要的。下面所介绍的都是有关渲染优化的策略。</p>
+<ul>
+<li><p>尽量使用css3来做动画<br>总所周知，css的性能要比js快，所以能使用css，尽量不用js来实现</p>
+</li>
+<li><p>避免使用setTimeout或setInterval，尽量使用requestAnimationFrame来做动画或者高频Dom操作。<br>因为setTimeout和setInterval无法保证callback函数的执行时机，很可能在帧结束的时候执行，从而导致丢帧，但是requestAnimationFrame可以保证callback函数在每帧动画开始的时候执行<br>requestAnimationFrame的中文MDN地址：<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame</a></p>
+</li>
+</ul>
+<ul>
+<li>复杂的计算操作使用Web Workers<br>如果有需要复杂的数据操作，比如对一个有一个个元素的数组遍历求和，那么Web Workers在适合不过了。</li>
+</ul>
+<p>Web Workers可以让JavaScript脚本运行在后台线程（类似于创建一个子线程），而后台线程不会影响到主线程中的页面。不过，使用Web Workers创建的线程是不能操作DOM树。<br>有关Web Workers的更多可以查看MDN详解：<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Using_web_workers" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Using_web_workers</a></p>
+<ul>
+<li>css放在头部，js放在尾部。</li>
+</ul>
+<p>读过前面js运行机制的应该知道页面渲染是怎样一个过程，不再赘述了。css放在头部会避免生成html树之后重新布局的闪屏现象，js一般对页面的影响较大，一般放在尾部最后执行。</p>
+<ul>
+<li>事件防抖（debounce）与节流（throttle）<br>针对高频触发的事件（mousemove、scroll）等事件，如果不加以控制会在短时间内触发很多事件。</li>
+</ul>
+<p>函数防抖是指频繁触发的情况下，只有足够的空闲时间，才执行代码一次。场景：注册时邮箱的输入框，随着用户的输入，实时判断邮箱格式是否正确，当第一次输入事件触发，设置定时：在800ms之后执行检查。假如只过了100ms，上次的定时还没执行，此时清除定时，重新定时800ms。直到最近一次的输入，后面没有紧邻的输入了，这最近一次的输入定时计时结束，终于执行了检查代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> filter  = <span class="regexp">/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]&#123;2,4&#125;)+$/</span>;  </span><br><span class="line">$(<span class="string">"#email"</span>).on(<span class="string">"keyup"</span>,checkEmail());  </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkEmail</span>(<span class="params"></span>)</span>&#123;  </span><br><span class="line">    <span class="keyword">let</span> timer=<span class="literal">null</span>;  </span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;  </span><br><span class="line">        clearTimeout(timer);  </span><br><span class="line">        timer=setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;  </span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'执行检查'</span>);  </span><br><span class="line">        &#125;,<span class="number">800</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数节流是指一定时间内js方法只跑一次。就是本来一秒要执行100次的变成一秒执行10次。<br>场景：函数节流应用的实际场景，多数在监听页面元素滚动事件的时候会用到。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> canRun = <span class="literal">true</span>;</span><br><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">"throttle"</span>).onscroll = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!canRun)&#123;</span><br><span class="line">        <span class="comment">// 判断是否已空闲，如果在执行中，则直接return</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    canRun = <span class="literal">false</span>;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"函数节流"</span>);</span><br><span class="line">        canRun = <span class="literal">true</span>;</span><br><span class="line">    &#125;, <span class="number">300</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>Dom操作<br>前端开发人员都知道Do操作是非常耗时的（曾亲测过30*30的表格遍历添加样式）。所以尽量避免频繁的Dom操作，如果避免不了就尽量对DOm操作做优化。</p>
+<p> 1.：缓存Dom查询，比如通过getElementByTagName(‘div’)获取Dom集，而不是逐个获取。</p>
+<p> 2： 合并Dom操作，使用createDocumentFragment()</p>
+</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">var</span> frag = document.createDocumentFragment()</span><br><span class="line"><span class="keyword">for</span> (i&lt;<span class="number">10</span>) &#123;</span><br><span class="line">    <span class="selector-tag">var</span> <span class="selector-tag">li</span> = document.createElement(<span class="string">'li'</span>)</span><br><span class="line">    frag.appendChild(li)</span><br><span class="line">&#125;</span><br><span class="line">document<span class="selector-class">.body</span><span class="selector-class">.appendChild</span>(frag)</span><br></pre></td></tr></table></figure>
+<pre><code>3： 使用React、Vue等框架的虚拟dom（原理目前还不明白），可以更快的实现dom操作。
+</code></pre><ul>
+<li>尽量避免重绘（rePaint）和回流（reFlow）<br>如果使用js修改元素的颜色或者背景色就会触发重绘，重绘的开销还是比较昂贵的，因为浏览器会在某一个DOM元素的视觉效果改变后去check这个DOM元素内的所有节点。</li>
+</ul>
+<p>如果修改元素的尺寸和位置就会发生回流，回流开销更大，它会在某一个DOM元素的位置发生改变后触发，而且它会重新计算所有元素的位置和在页面中的占有的面积，这样的话将会引起页面某一个部分甚至整个页面的重新渲染。</p>
+<ul>
+<li>css3硬件加速<br>浏览器渲染时，会分为两个图层：普通图层和复合图层。</li>
+</ul>
+<p>普通文档流内可以理解为一个复合图层，absolute、fixed布局虽然可以脱离普通文档流，但它仍然属于普通图层，不会启动硬件加速。上面说的重绘（rePaint）和回流（reFlow）说的就是普通图层上的重绘和回流。</p>
+<p>复合图层会启动硬件加速。和普通图层不在同一个图层，所以复合图层不会影响普通图层，如果一个元素被提升到复合图层，再操作该元素时，就不会引起普通图层的重绘和回流，从而提升渲染性能。</p>
+<p>如何启动硬件加速：</p>
+<p><em>1.使用translate3d和translateZ</em></p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">webkit-<span class="attribute">transform</span>: translateZ(<span class="number">0</span>);</span><br><span class="line">-moz-<span class="attribute">transform</span>: translateZ(<span class="number">0</span>);</span><br><span class="line">-ms-<span class="attribute">transform</span>: translateZ(<span class="number">0</span>);</span><br><span class="line">-o-<span class="attribute">transform</span>: translateZ(<span class="number">0</span>);</span><br><span class="line"><span class="attribute">transform</span>: translateZ(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">webkit-<span class="attribute">transform</span>: translate3d(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">-moz-<span class="attribute">transform</span>: translate3d(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">-ms-<span class="attribute">transform</span>: translate3d(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">-o-<span class="attribute">transform</span>: translate3d(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line"><span class="attribute">transform</span>: translate3d(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p><em>2.使用opacity</em><br>需要动画执行的过程中才会创建合成层，动画没有开始或结束后元素还会回到之前的状态</p>
+<p><em>3.使用will-chang属性</em><br>这个属性比较不常用，一般配合opacity与translate使用</p>
+<p><strong>针对webkit浏览器，启用硬件加速有些时候可能会导致浏览器频繁闪烁或抖动，可以使用下面方法消除：</strong></p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-webkit-<span class="attribute">backface-visibility</span>:hidden;</span><br><span class="line">-webkit-<span class="attribute">perspective</span>:<span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果使用硬件加速，请使用z-index配合使用， 因为如果这个元素添加了硬件加速，并且index层级比较低， 那么在这个元素的后面其它元素（层级比这个元素高的，或者相同的，并且releative或absolute属性相同的）， 会默认变为复合层渲染，如果处理不当会极大的影响性能</p>
+</blockquote>
+<ul>
+<li>避免强制同步布局和布局抖动</li>
+</ul>
+<p>浏览器渲染过程为：js/css(javascript) &gt; 计算样式(style) &gt; 布局(layout) &gt; 绘制(paint) &gt; 渲染合并图层（Composite）</p>
+<p><strong>JavaScript</strong>：JavaScript实现动画效果，DOM元素操作等。<br><strong>Style（计算样式）</strong>：确定每个DOM元素应该应用什么CSS规则。<br><strong>Layout（布局）</strong>：计算每个DOM元素在最终屏幕上显示的大小和位置。<br><strong>Paint（绘制）</strong>：在多个层上绘制DOM元素的的文字、颜色、图像、边框和阴影等。<br><strong>Composite（渲染层合并）</strong>：按照合理的顺序合并图层然后显示到屏幕上。</p>
+<p>在js中如果读取style属性的某些值就会让浏览器强行进行一次布局、计算，然后再返回值，比如：</p>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">offsetTop, offsetLeft, offsetWidth, offsetHeight</span><br><span class="line"></span><br><span class="line">scrollTop/Left/<span class="keyword">Width</span>/Height</span><br><span class="line"></span><br><span class="line">clientTop/Left/<span class="keyword">Width</span>/Height</span><br><span class="line"></span><br><span class="line"><span class="keyword">width</span>,height</span><br><span class="line"></span><br><span class="line">请求了getComputedStyle(), 或者 IE的 currentStyle</span><br></pre></td></tr></table></figure>
+<p><strong>所以，如果强制浏览器在执行JavaScript脚本之前先执行布局过程，这就是所谓的强制同步布局。</strong><br>比如下面代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">requestAnimationFrame(logBoxHeight);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 先写后读，触发强制布局</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">logBoxHeight</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 更新box样式</span></span><br><span class="line">    box.classList.add(<span class="string">'super-big'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 为了返回box的offersetHeight值</span></span><br><span class="line">    <span class="comment">// 浏览器必须先应用属性修改，接着执行布局过程</span></span><br><span class="line">    <span class="built_in">console</span>.log(box.offsetHeight);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 先读后写，避免强制布局</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">logBoxHeight</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 获取box.offsetHeight</span></span><br><span class="line">    <span class="built_in">console</span>.log(box.offsetHeight);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新box样式</span></span><br><span class="line">    box.classList.add(<span class="string">'super-big'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在JavaScript脚本运行的时候，它能获取到的元素样式属性值都是上一帧画面的，都是旧的值。因此，如果你在当前帧获取属性之前又对元素节点有改动，那就会导致浏览器必须先应用属性修改，结果执行布局过程，最后再执行JavaScript逻辑。</p>
+<p><strong>如果连续多次强制同步布局，就会导致布局抖动</strong><br>比如下面代码：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resizeAllParagraphsToMatchBlockWidth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; paragraphs.length; i++) &#123;</span><br><span class="line">    paragraphs[i].style.width = box.offsetWidth + <span class="string">'px'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">作者：SylvanasSun</span><br><span class="line">链接：https:<span class="comment">//juejin.im/post/59da456951882525ed2b706d</span></span><br><span class="line">来源：掘金</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
+<p>我们知道浏览器是一帧一帧的刷新页面的，对于每一帧，上一帧的布局信息都是已知的。<br>强制布局就是使用js强制浏览器提前布局，比如下面代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bed  每次循环都要去获取left ，就会发生一次回流</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">logBoxHeight</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  box.style.left += <span class="number">10</span></span><br><span class="line">  <span class="built_in">console</span>.log(box.style.left)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// goog </span></span><br><span class="line"><span class="keyword">var</span> width = box.offsetWidth;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resizeAllParagraphsToMatchBlockWidth</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; paragraphs.length; i++) &#123;</span><br><span class="line">    <span class="comment">// Now write.</span></span><br><span class="line">    paragraphs[i].style.width = width + <span class="string">'px'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>DOMContentLoaded与Load<br>DOMContentLoaded 事件触发时，仅当DOM加载完成才触发DOMContentLoaded，此时样式表，图片，外部引入资源都还没加载。而load是等所有的资源加载完毕才会触发。</li>
+</ul>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> 解析HTML结构。</span><br><span class="line"><span class="number">2.</span> 加载外部脚本和样式表文件。</span><br><span class="line"><span class="number">3.</span> 解析并执行脚本代码。</span><br><span class="line"><span class="number">4.</span> DOM树构建完成。<span class="comment">//DOMContentLoaded</span></span><br><span class="line"><span class="number">5.</span> 加载图片等外部文件。</span><br><span class="line">页面加载完毕。<span class="comment">//load</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>视觉优化<br>等待加载时间可以合理使用loading gif动图一定程度上消除用户等待时间的烦躁感</li>
+</ul>
+<h2 id="代码性能"><a href="#代码性能" class="headerlink" title="代码性能"></a>代码性能</h2><p>代码对性能的影响可大可小，但是养成一个良好的写代码习惯和高质量的代码，会潜移默化的提高性能，同时也能提高自己的水平。废话不多说，直接看我总结的部分要点（因为这一部分知识点太多，需要大家写代码的时候多多总结）。</p>
+<ul>
+<li>避免全局查找<br>访问局部变量会比访问全局变量快，因为js查找变量的时候现在局部作用局查找，找不到在逐级向上找。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (...)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="built_in">window</span>.location.href)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//good</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> href = <span class="built_in">window</span>.location.href</span><br><span class="line">    <span class="keyword">for</span> (...)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(href)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>循环技巧</li>
+</ul>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bed </span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">array</span>.length; i++)<span class="comment">&#123;</span></span><br><span class="line"><span class="comment">    ....</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>, len = <span class="keyword">array</span>.length; i &lt; len; i++)<span class="comment">&#123;</span></span><br><span class="line"><span class="comment">    ....</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">// 不用每次查询长度</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>不要使用for in 遍历数组<br>for in是最慢的，其他的都差不多，其中直接使用for循环是最快的。for in只是适合用来遍历对象。</p>
+</li>
+<li><p>使用+’’代替String()吧变量转化为字符串</p>
+</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> = <span class="number">12</span></span><br><span class="line"><span class="comment">//bad</span></span><br><span class="line"><span class="selector-tag">a</span> = String(a)</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> = <span class="number">12</span></span><br><span class="line"><span class="selector-tag">a</span> = <span class="selector-tag">a</span> + <span class="string">''</span></span><br></pre></td></tr></table></figure>
+<p>这个还有很多类似的，比如使用*1代替parseInt()等都是利用js的弱类型，其实这样对性能提升不是很大，网上有人测试过，进行十几万次变量转换，才快了零点几秒。</p>
+<ul>
+<li>删除dom</li>
+</ul>
+<p>删除dom元素要删除注册在该节点上的事件，否则就会产生无法回收的内存，在选择removeChild和innerHTML=’’二者之间尽量选择后者，据说removeChild有时候无法有效的释放节点（具体原因不明）</p>
+<ul>
+<li>使用事件代理处理事件<br>任何可以冒泡的事件都可以在节点的祖先节点上处理，这样对于子节点需要绑定相同事件的情况就不用分别给每个子节点添加事件监听，而是都提升到祖先节点处理。</li>
+<li>通过js生成的dom对象必须append到页面中</li>
+</ul>
+<p>在IE下，js创建的额dom如果没有添加到页面，这部分内存是不会被回收的</p>
+<ul>
+<li><p>避免与null比较<br>可以使用下面方法替换与null比较<br>1.如果该值为引用类型，则使用instanceof检查其构造函数<br>2.如果该值为基本类型，使用typeof检查类型</p>
+</li>
+<li><p>尽量使用三目运算符代替if else</p>
+</li>
+</ul>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(a&gt;b)&#123;<span class="built_in">num</span> = a&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;<span class="built_in">num</span> = b&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以替换为</span></span><br><span class="line"><span class="built_in">num</span> = a &gt; b ? a : b</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当判断条件大于3中情况时，使用switch代替if<br>因为switch的执行速度比if要快，也别是在IE下，速度大约是if的两倍</li>
+</ul>
+<blockquote>
+<p>先总结这么多，其实性能优化还有很多，像预加载、服务端渲染、css选择器优化等等。等有机会再总结</p>
+</blockquote>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src data-src="/zqt-blog/img/donate.jpg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/iconie_alloy">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/ai-er-lan-xue-da">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/3286578617">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/xiaotao.nie.5">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://github.com/AirCloud">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.linkedin.com/in/小涛-聂-80964aba">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://www.10000h.top">10000H</a></span>
+        <span>/</span>
+        
+        <span><a href="https://niexiaotao.com">Xiaotao&#39;s Page</a></span>
+        <span>/</span>
+        
+        <span><a href="#">It helps SEO</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/zqt-blog/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/zqt-blog/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>

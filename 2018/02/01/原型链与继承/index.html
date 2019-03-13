@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="聂小涛的博客">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/zqt-blog/img/favicon.ico">
+
+    <title>
+        
+        作用域与原型链 - AirCloud的博客 | AirCloud&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/zqt-blog/css/aircloud.css">
+    <link rel="stylesheet" href="/zqt-blog/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code， sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/zqt-blog/img/avatar.jpg">
+        </div>
+        <div class="name">
+            <i>Xiaotao Nie</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/zqt-blog/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#作用域与原型链"><span class="toc-text">作用域与原型链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#几个面试常问的几个问题，你是否知道"><span class="toc-text">几个面试常问的几个问题，你是否知道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是构造函数"><span class="toc-text">什么是构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原型特性"><span class="toc-text">原型特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原型链与继承"><span class="toc-text">原型链与继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#几种继承方式"><span class="toc-text">几种继承方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#原型继承"><span class="toc-text">原型继承</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#构造继承"><span class="toc-text">构造继承</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例继承"><span class="toc-text">实例继承</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#组合继承"><span class="toc-text">组合继承</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#寄生继承"><span class="toc-text">寄生继承</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解答一下最一开始提出的问题"><span class="toc-text">解答一下最一开始提出的问题</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> sometimes code， sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        作用域与原型链
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-02-01 22:55:19</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/zqt-blog/tags/#javascript" title="javascript">javascript</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <h2 id="作用域与原型链"><a href="#作用域与原型链" class="headerlink" title="作用域与原型链"></a>作用域与原型链</h2><blockquote>
+<p> 注意：本章讲的是在es6之前的原型链与继承。es6引入了类的概念，只是在写法上有所不同，原理是一样的。</p>
+</blockquote>
+<h3 id="几个面试常问的几个问题，你是否知道"><a href="#几个面试常问的几个问题，你是否知道" class="headerlink" title="几个面试常问的几个问题，你是否知道"></a>几个面试常问的几个问题，你是否知道</h3><ol>
+<li>instanceof的原理</li>
+<li>如何准确判断变量的类型</li>
+<li>如何写一个原型链继承的例子</li>
+<li>描述new一个对象的过程</li>
+</ol>
+<blockquote>
+<p>也许有些同学知道这几个问题的答案，就会觉得很小儿科，如果你还不知道这几个问题的答案或者背后所涉及到的知识点，那就好好看完下文，想必对你会有帮助。先不说答案，下面先分析一下涉及到的知识点。</p>
+</blockquote>
+<h3 id="什么是构造函数"><a href="#什么是构造函数" class="headerlink" title="什么是构造函数"></a>什么是构造函数</h3><p>JavaScript没有类的概念，JavaScript是一种基于对象的语言，除了五中值类型（number boolean string null undefined）之外，其他的三种引用类型（object、Array、Function）本质上都是对象，而构造函数其实也是普通的函数，只是可以使用构造函数来实例化对象。<br>    事实上，当任意一个普通函数用于创建一类对象时，它就被称作构造函数。像js的内置函数Object、Array、Date等都是构造函数。<br>在定义构造函数有以下几个特点：</p>
+<ul>
+<li>以大写字母开头定义构造函数</li>
+<li>在函数内部对新对象（this）的属性进行设置</li>
+<li>返回值必须是this，或者其它非对象类型的值</li>
+</ul>
+<p>下面定义一个简单的、标准的构造函数：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Obj</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'name'</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span> <span class="comment">// 默认有这一行 </span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> foo = <span class="keyword">new</span> Obj() <span class="comment">// 使用上面定义的构造函数创建一个对象实例</span></span><br></pre></td></tr></table></figure>
+<h3 id="原型特性"><a href="#原型特性" class="headerlink" title="原型特性"></a>原型特性</h3><p>js原型有5个特点，记住这5条特点，相信你一定会弄明白长期困扰你的原型关系。</p>
+<ol>
+<li>除了null所有引用类型（Object、Array、Function）都有对象特性，也就是都可以自由扩展属性。</li>
+<li>所有引用类型都有一个<em>proto</em>属性（又称为：隐式属性），<em>proto</em>是一个普通的对象。所有的对象都会有一个constructor属性，constructor始终指向创建当前对象的构造函数</li>
+<li>所有的函数都有一个prototype属性（又称为：显式属性），也是一个普通对象，这个prototype有一个constructor属性指向该函数。</li>
+<li>所有的引用类型的<em>proto</em>属性指向它的构造函数的prototype属性（比如：obj.<em>proto</em>指向Object.prototype,obj是定义的一个普通对象，Object是js的内置函数）</li>
+<li>当从一个对象中获得某个属性时，如果这个对象没有该属性，就会去它的<em>proto</em>（也就是它的构造函数的prototype）中去寻找</li>
+</ol>
+<p>先来解释一下这几条：<br>第一条的自由扩展性可以通过一个简单的例子来看</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">var</span> obj = &#123;&#125;</span><br><span class="line">obj<span class="selector-class">.name</span> = <span class="string">'name'</span></span><br><span class="line">console.log(obj) <span class="comment">// &#123;name:'name'&#125;</span></span><br></pre></td></tr></table></figure>
+<p>第二条和第三条是javascript就是这么规定的，没什么好说的</p>
+<p>第四条可以这么理解，当定义一个引用类型的变量var obj = {} 其实是var obj = new Object()的语法糖，这样Object就是obj的构造函数，根据第4条规定，obj.<em>proto</em> === Object.prototype，如果不理解可以看看上一章我们讲的js内置函数和上面讲的构造函数</p>
+<p>第五条应该好理解，当从obj中获取某个属性时，如果obj中没有定义该属性，就会逐级去它的<em>proto</em>对象中去寻找，而它的<em>proto</em>指向Object的prototype，也就是从Object的prototype对象中去寻找。</p>
+<h3 id="原型链与继承"><a href="#原型链与继承" class="headerlink" title="原型链与继承"></a>原型链与继承</h3><blockquote>
+<p>如果上面明白了原型，那么原型链就会很好理解</p>
+</blockquote>
+<p>根据原型定义的第4条和第5条，很容易发现通过对象的<em>proto</em>和函数的prototype把我们变量和构造函数（自定义的构造函数以及内置构造函数）像链子一样链接起来，所以又叫他原型链。</p>
+<p>有了原型链，就有了继承，继承就是一个对象像继承遗产一样继承从它的构造函数中获得一些属性的访问权。从下面一个小例子理解：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 属性</span></span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Animal'</span>;</span><br><span class="line">  <span class="comment">// 实例方法</span></span><br><span class="line">  <span class="keyword">this</span>.sleep = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在睡觉！'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 原型方法</span></span><br><span class="line">Animal.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params">food</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在吃：'</span> + food);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 原型继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span>(<span class="params"></span>)</span>&#123; </span><br><span class="line">&#125;</span><br><span class="line">Cat.prototype = <span class="keyword">new</span> Animal();</span><br><span class="line">Cat.prototype.name = <span class="string">'cat'</span>;</span><br></pre></td></tr></table></figure>
+<p>上面例子中在Foo构造函数的prototype中自定义一个somefn函数。然后通过new Foo()创建一个对象实例并赋值给bar变量，此时bar就等于{name:’bar’}。然后bar.somefn就去bar对象中寻找somefn这个属性，发现找不到，然后就去它的<em>proto</em>（其实就是Foo的prototype）中寻找，发现somefn就在Foo的prototype中定义了，就可以愉快的调用并执行somefn了。</p>
+<p>这里其实就是一个原型链与继承的典型例子，开发中可能构造函数复杂一点，属性定义的多一些，但是原理都是一样的。</p>
+<blockquote>
+<p>留一个问题，根据上面例子，如果执行bar.stString(),应该去哪里找toString这个方法？ （提示：prototype也是普通对象，也有自己的<em>proto</em>）</p>
+</blockquote>
+<h3 id="几种继承方式"><a href="#几种继承方式" class="headerlink" title="几种继承方式"></a>几种继承方式</h3><p>这几种都是es5中的继承，es6中提供了class类，继承起来更方便。</p>
+<h4 id="原型继承"><a href="#原型继承" class="headerlink" title="原型继承"></a>原型继承</h4><p>上述例子就是一个原型继承：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 属性</span></span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Animal'</span>;</span><br><span class="line">  <span class="comment">// 实例方法</span></span><br><span class="line">  <span class="keyword">this</span>.sleep = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在睡觉！'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 原型方法</span></span><br><span class="line">Animal.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params">food</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在吃：'</span> + food);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 原型继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span>(<span class="params"></span>)</span>&#123; </span><br><span class="line">&#125;</span><br><span class="line">Cat.prototype = <span class="keyword">new</span> Animal();</span><br><span class="line">Cat.prototype.name = <span class="string">'cat'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat()</span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Animal); <span class="comment">//true </span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Cat); <span class="comment">//true</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>非常纯粹的继承关系，实例是子类的实例，也是父类的实例</li>
+<li>简单，易于实现</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>要想为子类新增属性和方法，必须要在new Animal()这样的语句之后执行，不能放到构造器中</li>
+<li>无法实现多继承</li>
+<li>来自原型对象的引用属性是所有实例共享的（严重缺点）</li>
+<li>创建子类实例时，无法向父类构造函数传参（严重缺点）</li>
+</ul>
+<h4 id="构造继承"><a href="#构造继承" class="headerlink" title="构造继承"></a>构造继承</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 属性</span></span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Animal'</span>;</span><br><span class="line">  <span class="comment">// 实例方法</span></span><br><span class="line">  <span class="keyword">this</span>.sleep = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在睡觉！'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 原型方法</span></span><br><span class="line">Animal.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params">food</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在吃：'</span> + food);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 构造继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  Animal.call(<span class="keyword">this</span>);</span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Tom'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Test Code</span></span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat();</span><br><span class="line"><span class="built_in">console</span>.log(cat.name);</span><br><span class="line"><span class="built_in">console</span>.log(cat.sleep()); <span class="comment">// Tom正在睡觉！</span></span><br><span class="line"><span class="comment">// console.log(cat.eat('fish')); // cat.eat is not a function</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Animal); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Cat); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<ul>
+<li>解决了1中，子类实例共享父类引用属性的问题</li>
+<li>创建子类实例时，可以向父类传递参数</li>
+<li>可以实现多继承<br><strong>缺点</strong></li>
+<li>实例并不是父类的实例，只是子类的实例</li>
+<li>只能继承父类的实例属性和方法，不能继承原型属性/方法</li>
+<li>无法实现函数复用，每个子类都有父类实例函数的副本，影响性能</li>
+</ul>
+<h4 id="实例继承"><a href="#实例继承" class="headerlink" title="实例继承"></a>实例继承</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 属性</span></span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Animal'</span>;</span><br><span class="line">  <span class="comment">// 实例方法</span></span><br><span class="line">  <span class="keyword">this</span>.sleep = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在睡觉！'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 原型方法</span></span><br><span class="line">Animal.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params">food</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在吃：'</span> + food);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> instance = <span class="keyword">new</span> Animal();</span><br><span class="line">  instance.name = name || <span class="string">'Tom'</span>;</span><br><span class="line">  <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat(); <span class="comment">// 或者可以直接var cat = Cat()</span></span><br><span class="line"><span class="built_in">console</span>.log(cat.name);</span><br><span class="line"><span class="built_in">console</span>.log(cat.sleep()); <span class="comment">// Tom正在睡觉！</span></span><br><span class="line"><span class="built_in">console</span>.log(cat.eat(<span class="string">'fish'</span>)); <span class="comment">// Tom正在吃：fish</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Animal); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Cat); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<ul>
+<li>不限制调用方式，不管是new Cat()还是Cat(),返回的对象具有相同的效果</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>实例是父类的实例，不是子类的实例</li>
+<li>不支持多继承</li>
+</ul>
+<h4 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 属性</span></span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Animal'</span>;</span><br><span class="line">  <span class="comment">// 实例方法</span></span><br><span class="line">  <span class="keyword">this</span>.sleep = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在睡觉！'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 原型方法</span></span><br><span class="line">Animal.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params">food</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在吃：'</span> + food);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 组合继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  Animal.call(<span class="keyword">this</span>);</span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Tom'</span>;</span><br><span class="line">&#125;</span><br><span class="line">Cat.prototype = <span class="keyword">new</span> Animal();</span><br><span class="line">Cat.prototype.constructor = Cat;</span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat();</span><br><span class="line"><span class="built_in">console</span>.log(cat.name);</span><br><span class="line"><span class="built_in">console</span>.log(cat.sleep()); <span class="comment">// Tom正在睡觉！</span></span><br><span class="line"><span class="built_in">console</span>.log(cat.eat(<span class="string">'fish'</span>)); <span class="comment">// Tom正在吃：fish</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Animal); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Cat); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<ul>
+<li>弥补了方式2的缺陷，可以继承实例属性/方法，也可以继承原型属性/方法</li>
+<li>既是子类的实例，也是父类的实例</li>
+<li>不存在引用属性共享问题</li>
+<li>可传参</li>
+<li>函数可复用<br><strong>缺点</strong></li>
+<li>调用了两次父类构造函数，生成了两份实例（子类实例将子类原型上的那份屏蔽了）</li>
+</ul>
+<h4 id="寄生继承"><a href="#寄生继承" class="headerlink" title="寄生继承"></a>寄生继承</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ob = &#123;<span class="attr">name</span>:<span class="string">"小明"</span>,<span class="attr">friends</span>:[<span class="string">'小花'</span>,<span class="string">'小白'</span>]&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">object</span>(<span class="params">o</span>)</span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;<span class="comment">//创建一个构造函数F</span></span><br><span class="line">  F.prototype = o;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//上面再ECMAScript5 有了一新的规范写法，Object.create(ob) 效果是一样的  </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createOb</span>(<span class="params">o</span>)</span>&#123;</span><br><span class="line">   <span class="keyword">var</span> newob = object(o);<span class="comment">//创建对象</span></span><br><span class="line">   newob.sayname = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="comment">//增强对象</span></span><br><span class="line">       <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> newob;<span class="comment">//指定对象</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ob1 = createOb(ob);</span><br><span class="line">ob1.sayname()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>寄生继承原理尚不明白。</p>
+</blockquote>
+<p>####寄生组合继承</p>
+<p>寄生组合继承有两种方式：</p>
+<p><em>第一种：利用创建没有实例方法的函数</em><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 属性</span></span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Animal'</span>;</span><br><span class="line">  <span class="comment">// 实例方法</span></span><br><span class="line">  <span class="keyword">this</span>.sleep = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在睡觉！'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 原型方法</span></span><br><span class="line">Animal.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params">food</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在吃：'</span> + food);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//寄生组合继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  Animal.call(<span class="keyword">this</span>);</span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Tom'</span>;</span><br><span class="line">&#125;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="comment">// 创建一个没有实例方法的类</span></span><br><span class="line">  <span class="keyword">var</span> Super = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line">  Super.prototype = Animal.prototype;</span><br><span class="line">  <span class="comment">//将实例作为子类的原型</span></span><br><span class="line">  Cat.prototype = <span class="keyword">new</span> Super();</span><br><span class="line">  Cat.prototype.constructor = Cat;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat();</span><br><span class="line"><span class="built_in">console</span>.log(cat.name);</span><br><span class="line"><span class="built_in">console</span>.log(cat.sleep()); <span class="comment">// Tom正在睡觉！</span></span><br><span class="line"><span class="built_in">console</span>.log(cat.eat(<span class="string">'fish'</span>)); <span class="comment">// Tom正在吃：fish</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Animal); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Cat); <span class="comment">//true</span></span><br></pre></td></tr></table></figure></p>
+<p><em>第二种：利用Object.create函数</em></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 寄生继承核心方法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inheritPrototype</span>(<span class="params">Parent, Children</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> prototype = <span class="built_in">Object</span>.create(Parent.prototype);</span><br><span class="line">    prototype.constructor = Children;</span><br><span class="line">    Children.prototype = prototype;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 属性</span></span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Animal'</span>;</span><br><span class="line">  <span class="comment">// 实例方法</span></span><br><span class="line">  <span class="keyword">this</span>.sleep = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在睡觉！'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 原型方法</span></span><br><span class="line">Animal.prototype.eat = <span class="function"><span class="keyword">function</span>(<span class="params">food</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'正在吃：'</span> + food);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  Animal.call(<span class="keyword">this</span>);</span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'Tom'</span>;</span><br><span class="line">&#125;</span><br><span class="line">inheritPrototype(Animal, Cat)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat();</span><br><span class="line"><span class="built_in">console</span>.log(cat.name);</span><br><span class="line"><span class="built_in">console</span>.log(cat.sleep()); <span class="comment">// Tom正在睡觉！</span></span><br><span class="line"><span class="built_in">console</span>.log(cat.eat(<span class="string">'fish'</span>)); <span class="comment">// Tom正在吃：fish</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Animal); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Cat); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>Object.create其实与以下代码等价</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">object</span><span class="params">(o)</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">f</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    f.prototype = o;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> f();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<ul>
+<li>最完美的继承解决方案</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>实现复杂</li>
+</ul>
+<h3 id="解答一下最一开始提出的问题"><a href="#解答一下最一开始提出的问题" class="headerlink" title="解答一下最一开始提出的问题"></a>解答一下最一开始提出的问题</h3><p>看到这里应该对原型链与继承的原理有所了解了，再回头看上面的问题，你也会发现这都是小儿科。<br>第一个问题：instanceof原理？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = []</span><br><span class="line">arr <span class="keyword">instanceof</span> <span class="built_in">Array</span></span><br></pre></td></tr></table></figure>
+<p>instanceof原理就是利用了原型链，当执行arr instanceof Array时，会从arr的<em>proto</em>一层一层往上找，看是否能不能找到Array的prototype。<br>我们知道var arr = [] 其实是var arr = new Array()的语法糖，所以arr的<em>proto</em>指向Array的prototype，结果返回true</p>
+<p>第二个问题：如何准确判断变量类型?<br>可以使用instanceof帮助我们判断，而不是typeof</p>
+<p>第三个问题：如何写一个原型链继承的例子？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'name'</span></span><br><span class="line">    <span class="keyword">this</span>.run = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Bar</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">Bar.prototype = <span class="keyword">new</span> Foo() <span class="comment">// 从构造函数Foo中继承</span></span><br><span class="line"><span class="keyword">var</span> baz = <span class="keyword">new</span> Bar()</span><br><span class="line">baz.run() <span class="comment">// 打印出 'name'</span></span><br></pre></td></tr></table></figure>
+<p>第四个问题：描述new一个对象的过程</p>
+<ol>
+<li>创建一个新的对象，</li>
+<li>获得构造函数的prototype属性，并把prototype赋值给新对象的<em>proto</em>,this指向这个新对象</li>
+<li>执行构造函数，返回构造函数的内容</li>
+</ol>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src data-src="/zqt-blog/img/donate.jpg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/iconie_alloy">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/ai-er-lan-xue-da">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/3286578617">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/xiaotao.nie.5">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://github.com/AirCloud">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.linkedin.com/in/小涛-聂-80964aba">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://www.10000h.top">10000H</a></span>
+        <span>/</span>
+        
+        <span><a href="https://niexiaotao.com">Xiaotao&#39;s Page</a></span>
+        <span>/</span>
+        
+        <span><a href="#">It helps SEO</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/zqt-blog/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/zqt-blog/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>

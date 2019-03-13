@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="聂小涛的博客">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/zqt-blog/img/favicon.ico">
+
+    <title>
+        
+        js运行机制 - AirCloud的博客 | AirCloud&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/zqt-blog/css/aircloud.css">
+    <link rel="stylesheet" href="/zqt-blog/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code， sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/zqt-blog/img/avatar.jpg">
+        </div>
+        <div class="name">
+            <i>Xiaotao Nie</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/zqt-blog/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zqt-blog/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#js运行机制"><span class="toc-text">js运行机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程与线程"><span class="toc-text">进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#渲染进程"><span class="toc-text">渲染进程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GUI渲染线程"><span class="toc-text">GUI渲染线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JS引擎线程"><span class="toc-text">JS引擎线程</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> sometimes code， sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        js运行机制
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-02-03 21:42:10</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/zqt-blog/tags/#javascript" title="javascript">javascript</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <h2 id="js运行机制"><a href="#js运行机制" class="headerlink" title="js运行机制"></a>js运行机制</h2><blockquote>
+<p>本章了解一下js的运行原理，了解了js的运行原理才能写出更优美的代码，提高运行效率，还能解决开发中遇到的不理解的问题。</p>
+</blockquote>
+<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><p>进程是cpu资源分配的最小单位，进程可以包含多个线程。 浏览器就是多进程的，每打开的一个浏览器窗口就是一个进程。</p>
+<p>线程是cpu调度的最小单位，同一进程下的各个线程之间共享程序的内存空间。</p>
+<p>可以把进程看做一个仓库，线程是可以运输的货车，每个仓库有属于自己的多辆货车为仓库服务（运货），每个仓库可以同时由多辆车同时拉货，但是每辆车同一时间只能干一件事，就是运输本次的货物。这样就好理解了吧。</p>
+<h3 id="渲染进程"><a href="#渲染进程" class="headerlink" title="渲染进程"></a>渲染进程</h3><p>浏览器包括4个进程：</p>
+<ol>
+<li>主进程（Browser进程），浏览器只有一个主进程，负责资源下载，界面展示等主要基础功能</li>
+<li>GPU进程，负责3D图示绘制</li>
+<li>第三方插件进程，负责第三方插件处理</li>
+<li>渲染进程（Renderer进程），负责js执行，页面渲染等功能，也是本章重点内容</li>
+</ol>
+<p>渲染进程主要包括GUI渲染线程、Js引擎线程、事件循环线程、定时器线程、http异步线程。</p>
+<h4 id="GUI渲染线程"><a href="#GUI渲染线程" class="headerlink" title="GUI渲染线程"></a>GUI渲染线程</h4><p>先看看浏览器得到一个网站资源后干了哪些事：</p>
+<ol>
+<li>首先浏览器会解析html代码（实际上html代码本质是字符串）转化为浏览器认识的节点，生成DOM树，也就是DOM Tree</li>
+<li>然后解析css，生成CSSOM（CSS规则树）</li>
+<li>把DOM Tree 和CSSOM结合，生成Rendering Tree(渲染树)</li>
+</ol>
+<p>GUI就是来干这个事情的，如果修改了一些元素的颜色或者背景色，页面就会重绘（Repaint），如果修改元素的尺寸，页面就会回流（Reflow），当页面需要Repaing和Reflow时GUI多会执行，进行页面绘制。</p>
+<p><em>这里提示一点：Reflow比Repaint的成本更高，在js性能优化中会将如何避免Reflow和Repaint</em></p>
+<h4 id="JS引擎线程"><a href="#JS引擎线程" class="headerlink" title="JS引擎线程"></a>JS引擎线程</h4><p>js引擎线程就是js内核，负责解析与执行js代码，也称为主线程。浏览器同时只能有一个JS引擎线程在运行JS程序，所以js是单线程运行的。</p>
+<p>需要注意的是，js引擎线程和GUI渲染线程同时只能有一个工作，js引擎线程会阻塞GUI渲染线程</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"div1"</span>&gt;</span> a <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">            <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>).innerHTML = <span class="string">'b'</span></span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'div2'</span>&gt;</span> div2 <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器渲染的时候遇到<script>标签，就会停止GUI的渲染，然后js引擎线程开始工作，执行里面的js代码，等js执行完毕，js引擎线程停止工作，GUI继续渲染下面的内容。所以如果js执行时间太长就会造成页面卡顿的情况，这也是后面性能优化的点。</p>
+<h4 id="事件循环线程"><a href="#事件循环线程" class="headerlink" title="事件循环线程"></a>事件循环线程</h4><p>事件循环线程用来管理控制事件循环，并且管理着一个事件队列（task queue），当js执行碰到事件绑定和一些异步操作时，会把对应的事件添加到对应的线程中（比如定时器操作，便把定时器事件添加到定时器线程），等异步事件有了结果，便把他们的回调操作添加到事件队列，等待js引擎线程空闲时来处理。</p>
+<h4 id="定时器线程"><a href="#定时器线程" class="headerlink" title="定时器线程"></a>定时器线程</h4><p>由于js是单线程运行，所以不能抽出时间来计时，只能另开辟一个线程来处理定时器任务，等计时完成，把定时器要执行的操作添加到事件任务队列尾，等待js引擎线程来处理。这个线程就是定时器线程。</p>
+<h4 id="异步请求线程"><a href="#异步请求线程" class="headerlink" title="异步请求线程"></a>异步请求线程</h4><p>当执行到一个http异步请求时，便把异步请求事件添加到异步请求线程，等收到响应（准确来说应该是http状态变化），把回调函数添加到事件队列，等待js引擎线程来执行。</p>
+<h3 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h3><p>上面介绍了渲染进程中的5个主要的线程，可能看完上面对各个线程简单的介绍，还有点不明白他们之间到底怎么协作工作的，下面就从Event Loop的角度来聊一聊他们之间是怎样那么愉快合作的。</p>
+<p>已经知道了js是单线程运行的，也知道js中有同步操作和异步操作。同步和异步大家应该很熟了，不多介绍。</p>
+<p>同步操作运行在js引擎线程（主线程）上，会形成一个执行栈，而异步操作则在他们对应的异步线程上处理（比如：定时操作在定时器线程上；http请求则在异步请求线程上处理）。</p>
+<p>而事件循环线程则监视着这些异步线程们，等异步线程们里面的操作有了结果（比如：定时器计时完成，或者http请求获取到响应），便把他们的毁掉函数添加到事件队列尾部，整个过程中执行栈、事件队列就构成Event Loop。</p>
+<p>请看网络盗图：</p>
+<p><img src="/img/bV3c2b" alt="clipboard.png"></p>
+<p>这是网络上对Event Loop的解释图，相信大家现在能明白这张图的含义了。</p>
+<h3 id="有关定时器（setTimeout、setInterval）的更多趣事"><a href="#有关定时器（setTimeout、setInterval）的更多趣事" class="headerlink" title="有关定时器（setTimeout、setInterval）的更多趣事"></a>有关定时器（setTimeout、setInterval）的更多趣事</h3><h4 id="定时器会按照规定时间执行吗？"><a href="#定时器会按照规定时间执行吗？" class="headerlink" title="定时器会按照规定时间执行吗？"></a>定时器会按照规定时间执行吗？</h4><p>定时器是规定在一段时间之后执行一段代码，但是在js执行中不会准确无误的按照预期的时间去执行定时器里面的代码。</p>
+<p>一个原因是W3C标准规定setTimeout中最小的时间周期是4毫秒，凡是低于4ms的时间间隔都按照4ms来处理。</p>
+<p>其实还有一个重要的原因，如果仔细看上面的文章，大家应该会想到在js执行的时候，主线程碰到定时器的时候，是不会直接处理的，应该是先把定时器事件交给定时器线程去处理，这时主线程继续执行下面的代码，同时定时器线程开始计时处理，等到计时完毕，事件循环线程会把定时器要执行的操作放在事件队列末尾，等主线程空闲的时候再来执行事件队列里面的操作。</p>
+<h4 id="应该使用setTimeout还是setInterval"><a href="#应该使用setTimeout还是setInterval" class="headerlink" title="应该使用setTimeout还是setInterval"></a>应该使用setTimeout还是setInterval</h4><p>使用setTimeout模拟setInterval代码类似以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    setTimeout(say, <span class="number">1000</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'hello world'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setTimeout(say, <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+<p>这样js碰到定时器，会交给定时器线程处理，然后等计时完毕，定时器里面的操作添加到事件队列，等主线程空闲去执行，主线程执行的时候又会发遇到定时器，这是又开始执行上面的一系列操作。</p>
+<p>你会发现，这样做会在每一次定时器执行完毕才开始下一个定时器，其中的误差只是等待主线程空闲所需要等待的时间。</p>
+<p>而setInterval是规定每隔固定的时间就往定时器线程中推入一个事件，这样做有一个问题，就是累积效应。</p>
+<ul>
+<li>累积效应：就是如果定时器里面的代码执行所需的时间大于定时器的执行周期，就会出现累计效应，简单来说就是上一次定时器里面的操作还没执行完毕，下一次定时器事件又来了</li>
+</ul>
+<p>累积效应会导致有些事件丢失，具体为什么会丢失，感兴趣的可以看<a href="https://juejin.im/post/59cf06745188253fbe466f78">这篇文章</a>，所以为了保险起见，尽量去使用setTimeout而不使用setInterval。</p>
+<p>如果有对setTimeout非常感兴趣的同学，我非常推荐大家去看看<a href="https://juejin.im/post/58cf180b0ce4630057d6727c">80% 应聘者都不及格的 JS 面试题</a>这篇文章。</p>
+<h3 id="macrotask与microtask"><a href="#macrotask与microtask" class="headerlink" title="macrotask与microtask"></a>macrotask与microtask</h3><p>microtask是Promise里一个新的概念。</p>
+<p>####macrotask</p>
+<ul>
+<li>macrotask中的事件都是放在一个事件队列中的，而这个队列由事件触发线程维护</li>
+<li>macrotask（又称之为宏任务），可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行）</li>
+<li>每一个task会从头到尾将这个任务执行完毕，不会执行其它</li>
+<li>浏览器为了能够使得JS内部task与DOM任务能够有序的执行，会在一个task执行结束后，在下一个 task 执行开始前，对页面进行重新渲染</li>
+</ul>
+<h4 id="microtask"><a href="#microtask" class="headerlink" title="microtask"></a>microtask</h4><ul>
+<li>microtask（又称为微任务），可以理解是在当前 task 执行结束后立即执行的任务</li>
+<li>microtask中的所有微任务都是添加到微任务队列（Job Queues）中，等待当前macrotask执行完毕后执行，而这个队列由JS引擎线程维护</li>
+<li>在当前task任务后，下一个task之前，在渲染之前执行</li>
+<li>所以它的响应速度相比setTimeout（setTimeout是task）会更快，因为无需等渲染</li>
+<li>也就是说，在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）</li>
+</ul>
+<p>请看网络盗图：</p>
+<p><img src="/img/bV3ddH" alt="clipboard.png"></p>
+<p>所以js运行过程：</p>
+<ul>
+<li>执行一个宏任务（栈中没有就从事件队列中获取）</li>
+<li>执行过程中如果遇到微任务，就将它添加到微任务的任务队列中</li>
+<li>宏任务执行完毕后，立即执行当前微任务队列中的所有微任务（依次执行）</li>
+<li>当前宏任务执行完毕，开始检查渲染，然后GUI线程接管渲染</li>
+<li>渲染完毕后，JS线程继续接管，开始下一个宏任务（从事件队列中获取）</li>
+</ul>
+<p>有关macrotask和microtask的分析借鉴于<a href="https://juejin.im/post/5a6547d0f265da3e283a1df7">从浏览器多进程到JS单线程，JS运行机制最全面的一次梳理</a></p>
+</script></p>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src data-src="/zqt-blog/img/donate.jpg">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/iconie_alloy">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/ai-er-lan-xue-da">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/3286578617">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/xiaotao.nie.5">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://github.com/AirCloud">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.linkedin.com/in/小涛-聂-80964aba">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://www.10000h.top">10000H</a></span>
+        <span>/</span>
+        
+        <span><a href="https://niexiaotao.com">Xiaotao&#39;s Page</a></span>
+        <span>/</span>
+        
+        <span><a href="#">It helps SEO</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/zqt-blog/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/zqt-blog/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+        */
+        if( '' || '')
+        var disqus_config = function () {
+            this.page.url = '';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://airclouds-blog.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+
+
+</html>
