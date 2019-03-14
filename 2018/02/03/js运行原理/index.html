@@ -89,7 +89,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#js运行机制"><span class="toc-text">js运行机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程与线程"><span class="toc-text">进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#渲染进程"><span class="toc-text">渲染进程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GUI渲染线程"><span class="toc-text">GUI渲染线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JS引擎线程"><span class="toc-text">JS引擎线程</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#js运行机制"><span class="toc-text">js运行机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程与线程"><span class="toc-text">进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#渲染进程"><span class="toc-text">渲染进程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GUI渲染线程"><span class="toc-text">GUI渲染线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JS引擎线程"><span class="toc-text">JS引擎线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#事件循环线程"><span class="toc-text">事件循环线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#定时器线程"><span class="toc-text">定时器线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#异步请求线程"><span class="toc-text">异步请求线程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Event-Loop"><span class="toc-text">Event Loop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有关定时器（setTimeout、setInterval）的更多趣事"><span class="toc-text">有关定时器（setTimeout、setInterval）的更多趣事</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#定时器会按照规定时间执行吗？"><span class="toc-text">定时器会按照规定时间执行吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#应该使用setTimeout还是setInterval"><span class="toc-text">应该使用setTimeout还是setInterval</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#macrotask与microtask"><span class="toc-text">macrotask与microtask</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#microtask"><span class="toc-text">microtask</span></a></li></ol></li></ol></li></ol>
 </div>
     
 </div>
@@ -162,7 +162,7 @@
 <h4 id="JS引擎线程"><a href="#JS引擎线程" class="headerlink" title="JS引擎线程"></a>JS引擎线程</h4><p>js引擎线程就是js内核，负责解析与执行js代码，也称为主线程。浏览器同时只能有一个JS引擎线程在运行JS程序，所以js是单线程运行的。</p>
 <p>需要注意的是，js引擎线程和GUI渲染线程同时只能有一个工作，js引擎线程会阻塞GUI渲染线程</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"div1"</span>&gt;</span> a <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">            <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>).innerHTML = <span class="string">'b'</span></span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'div2'</span>&gt;</span> div2 <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在浏览器渲染的时候遇到<script>标签，就会停止GUI的渲染，然后js引擎线程开始工作，执行里面的js代码，等js执行完毕，js引擎线程停止工作，GUI继续渲染下面的内容。所以如果js执行时间太长就会造成页面卡顿的情况，这也是后面性能优化的点。</p>
+<p>在浏览器渲染的时候遇到script标签，就会停止GUI的渲染，然后js引擎线程开始工作，执行里面的js代码，等js执行完毕，js引擎线程停止工作，GUI继续渲染下面的内容。所以如果js执行时间太长就会造成页面卡顿的情况，这也是后面性能优化的点。</p>
 <h4 id="事件循环线程"><a href="#事件循环线程" class="headerlink" title="事件循环线程"></a>事件循环线程</h4><p>事件循环线程用来管理控制事件循环，并且管理着一个事件队列（task queue），当js执行碰到事件绑定和一些异步操作时，会把对应的事件添加到对应的线程中（比如定时器操作，便把定时器事件添加到定时器线程），等异步事件有了结果，便把他们的回调操作添加到事件队列，等待js引擎线程空闲时来处理。</p>
 <h4 id="定时器线程"><a href="#定时器线程" class="headerlink" title="定时器线程"></a>定时器线程</h4><p>由于js是单线程运行，所以不能抽出时间来计时，只能另开辟一个线程来处理定时器任务，等计时完成，把定时器要执行的操作添加到事件任务队列尾，等待js引擎线程来处理。这个线程就是定时器线程。</p>
 <h4 id="异步请求线程"><a href="#异步请求线程" class="headerlink" title="异步请求线程"></a>异步请求线程</h4><p>当执行到一个http异步请求时，便把异步请求事件添加到异步请求线程，等收到响应（准确来说应该是http状态变化），把回调函数添加到事件队列，等待js引擎线程来执行。</p>
@@ -171,7 +171,7 @@
 <p>同步操作运行在js引擎线程（主线程）上，会形成一个执行栈，而异步操作则在他们对应的异步线程上处理（比如：定时操作在定时器线程上；http请求则在异步请求线程上处理）。</p>
 <p>而事件循环线程则监视着这些异步线程们，等异步线程们里面的操作有了结果（比如：定时器计时完成，或者http请求获取到响应），便把他们的毁掉函数添加到事件队列尾部，整个过程中执行栈、事件队列就构成Event Loop。</p>
 <p>请看网络盗图：</p>
-<p><img src="/img/bV3c2b" alt="clipboard.png"></p>
+<p><img src="https://image-static.segmentfault.com/138/714/1387142244-5a75a1f21e0d8_articlex" alt="图片描述"></p>
 <p>这是网络上对Event Loop的解释图，相信大家现在能明白这张图的含义了。</p>
 <h3 id="有关定时器（setTimeout、setInterval）的更多趣事"><a href="#有关定时器（setTimeout、setInterval）的更多趣事" class="headerlink" title="有关定时器（setTimeout、setInterval）的更多趣事"></a>有关定时器（setTimeout、setInterval）的更多趣事</h3><h4 id="定时器会按照规定时间执行吗？"><a href="#定时器会按照规定时间执行吗？" class="headerlink" title="定时器会按照规定时间执行吗？"></a>定时器会按照规定时间执行吗？</h4><p>定时器是规定在一段时间之后执行一段代码，但是在js执行中不会准确无误的按照预期的时间去执行定时器里面的代码。</p>
 <p>一个原因是W3C标准规定setTimeout中最小的时间周期是4毫秒，凡是低于4ms的时间间隔都按照4ms来处理。</p>
@@ -184,8 +184,8 @@
 <ul>
 <li>累积效应：就是如果定时器里面的代码执行所需的时间大于定时器的执行周期，就会出现累计效应，简单来说就是上一次定时器里面的操作还没执行完毕，下一次定时器事件又来了</li>
 </ul>
-<p>累积效应会导致有些事件丢失，具体为什么会丢失，感兴趣的可以看<a href="https://juejin.im/post/59cf06745188253fbe466f78">这篇文章</a>，所以为了保险起见，尽量去使用setTimeout而不使用setInterval。</p>
-<p>如果有对setTimeout非常感兴趣的同学，我非常推荐大家去看看<a href="https://juejin.im/post/58cf180b0ce4630057d6727c">80% 应聘者都不及格的 JS 面试题</a>这篇文章。</p>
+<p>累积效应会导致有些事件丢失，具体为什么会丢失，感兴趣的可以看<a href="https://juejin.im/post/59cf06745188253fbe466f78" target="_blank" rel="noopener">这篇文章</a>，所以为了保险起见，尽量去使用setTimeout而不使用setInterval。</p>
+<p>如果有对setTimeout非常感兴趣的同学，我非常推荐大家去看看<a href="https://juejin.im/post/58cf180b0ce4630057d6727c" target="_blank" rel="noopener">80% 应聘者都不及格的 JS 面试题</a>这篇文章。</p>
 <h3 id="macrotask与microtask"><a href="#macrotask与microtask" class="headerlink" title="macrotask与microtask"></a>macrotask与microtask</h3><p>microtask是Promise里一个新的概念。</p>
 <p>####macrotask</p>
 <ul>
@@ -202,7 +202,7 @@
 <li>也就是说，在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）</li>
 </ul>
 <p>请看网络盗图：</p>
-<p><img src="/img/bV3ddH" alt="clipboard.png"></p>
+<p><img src="https://image-static.segmentfault.com/380/645/38064528-5a75b4ca8bcd4_articlex" alt="图片描述"></p>
 <p>所以js运行过程：</p>
 <ul>
 <li>执行一个宏任务（栈中没有就从事件队列中获取）</li>
@@ -211,8 +211,8 @@
 <li>当前宏任务执行完毕，开始检查渲染，然后GUI线程接管渲染</li>
 <li>渲染完毕后，JS线程继续接管，开始下一个宏任务（从事件队列中获取）</li>
 </ul>
-<p>有关macrotask和microtask的分析借鉴于<a href="https://juejin.im/post/5a6547d0f265da3e283a1df7">从浏览器多进程到JS单线程，JS运行机制最全面的一次梳理</a></p>
-</script></p>
+<p>有关macrotask和microtask的分析借鉴于<a href="https://juejin.im/post/5a6547d0f265da3e283a1df7" target="_blank" rel="noopener">从浏览器多进程到JS单线程，JS运行机制最全面的一次梳理</a></p>
+
         
             <div class="donate-container">
     <div class="donate-button">
